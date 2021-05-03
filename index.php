@@ -34,6 +34,16 @@ class Felvetelizo {
         return array_diff($tmp, $kotelezoTargyak);
     }
 
+    private function legnagyobbKotelezoenValaszthato(){
+        $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
+        $max = 0;
+        foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
+            if(!in_array($value['nev'],$kotelezoTargyak) && rtrim($value['eredmeny'], "%") > $max){
+                $max = rtrim($value['eredmeny'], "%");
+            }    
+        }
+        return $max;
+    }
 
 
     public function pontszamitas(){
@@ -52,11 +62,13 @@ class Felvetelizo {
             return;
         }
 
+        echo $this->legnagyobbKotelezoenValaszthato();
+
 
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData4);
+$felvetelizo = new Felvetelizo($exampleData1);
 
 $felvetelizo->pontszamitas();
 
