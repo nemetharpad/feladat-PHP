@@ -8,8 +8,6 @@ class Felvetelizo {
         $this->adatok = $adatok;
     }
 
-    //private $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
-
     private function aTargy20alatt() {
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
             if(rtrim($value['eredmeny'], "%") < 20){
@@ -27,6 +25,15 @@ class Felvetelizo {
         return array_diff($kotelezoTargyak, $tmp);
     }
 
+    private function kotelezoenValaszthatoTargyak() {
+        $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
+        $tmp = [];
+        foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
+            array_push($tmp, $value['nev']);     
+        }
+        return array_diff($tmp, $kotelezoTargyak);
+    }
+
 
 
     public function pontszamitas(){
@@ -40,11 +47,16 @@ class Felvetelizo {
             return;
         }
 
+        if(!$this->kotelezoenValaszthatoTargyak()){
+            echo "hiba,  egy kötelezően választható tárgyat mindenképpen választani kell";
+            return;
+        }
+
 
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData2);
+$felvetelizo = new Felvetelizo($exampleData4);
 
 $felvetelizo->pontszamitas();
 

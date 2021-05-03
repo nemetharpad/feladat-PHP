@@ -186,3 +186,41 @@ $exampleData3 = [
         ],
     ],
 ];
+
+//hiba nincs kotelezoen valszthato targy
+$exampleData4 = [
+    'valasztott-szak' => [
+        'egyetem' => 'ELTE',
+        'kar' => 'IK',
+        'szak' => 'Programtervező informatikus',
+    ],
+    'erettsegi-eredmenyek' => [
+        [
+            'nev' => 'magyar nyelv és irodalom',
+            'tipus' => 'közép',
+            'eredmeny' => '45%',
+        ],
+        [
+            'nev' => 'történelem',
+            'tipus' => 'közép',
+            'eredmeny' => '80%',
+        ],
+        [
+            'nev' => 'matematika',
+            'tipus' => 'emelt',
+            'eredmeny' => '90%',
+        ],
+    ],
+    'tobbletpontok' => [
+        [
+            'kategoria' => 'Nyelvvizsga',
+            'tipus' => 'B2',
+            'nyelv' => 'angol',
+        ],
+        [
+            'kategoria' => 'Nyelvvizsga',
+            'tipus' => 'C1',
+            'nyelv' => 'német',
+        ],
+    ],
+];
