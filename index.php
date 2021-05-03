@@ -8,6 +8,24 @@ class Felvetelizo {
         $this->adatok = $adatok;
     }
 
+    private static $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
+    private static $szakok = [
+            'szak' => [
+            'egyetem' => 'ELTE',
+            'kar' => 'IK',
+            'szak' => 'Programtervező informatikus',
+            'kotelezo' => 'matematika',
+            'kotelezoen-valaszthato'=> ["biológia", "fizika", "informatika", "kémia"],
+            ],
+            'szak' => [
+                'egyetem' => 'PPKE',
+                'kar' => 'BTK',
+                'szak' => 'Anglisztika',
+                'kotelezo' => 'angol (emelt szinten)',
+                'kotelezoen-valaszthato'=> ["francia", "német", "olasz", "orosz", "spanyol", "történelem"],
+            ],
+    ];
+
     private function aTargy20alatt() {
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
             if(rtrim($value['eredmeny'], "%") < 20){
@@ -17,28 +35,25 @@ class Felvetelizo {
     }
 
     private function hianyzikKotelezoTargy() {
-        $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
         $tmp = [];
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
             array_push($tmp, $value['nev']);     
         }
-        return array_diff($kotelezoTargyak, $tmp);
+        return array_diff(self::$kotelezoTargyak, $tmp);
     }
 
     private function kotelezoenValaszthatoTargyak() {
-        $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
         $tmp = [];
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
             array_push($tmp, $value['nev']);     
         }
-        return array_diff($tmp, $kotelezoTargyak);
+        return array_diff($tmp, self::$kotelezoTargyak);
     }
 
     private function legnagyobbKotelezoenValaszthato(){
-        $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
         $max = 0;
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
-            if(!in_array($value['nev'],$kotelezoTargyak) && rtrim($value['eredmeny'], "%") > $max){
+            if(!in_array($value['nev'],self::$kotelezoTargyak) && rtrim($value['eredmeny'], "%") > $max){
                 $max = rtrim($value['eredmeny'], "%");
             }    
         }
@@ -68,7 +83,7 @@ class Felvetelizo {
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData1);
+$felvetelizo = new Felvetelizo($exampleData0);
 
 $felvetelizo->pontszamitas();
 
