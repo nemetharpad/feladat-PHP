@@ -10,20 +10,20 @@ class Felvetelizo {
 
     private static $kotelezoTargyak = ["magyar nyelv és irodalom", "történelem", "matematika"];
     private static $szakok = [
-            'szak' => [
+            [
             'egyetem' => 'ELTE',
             'kar' => 'IK',
             'szak' => 'Programtervező informatikus',
             'kotelezo' => 'matematika',
             'kotelezoen-valaszthato'=> ["biológia", "fizika", "informatika", "kémia"],
             ],
-            'szak' => [
+            [
                 'egyetem' => 'PPKE',
                 'kar' => 'BTK',
                 'szak' => 'Anglisztika',
                 'kotelezo' => 'angol (emelt szinten)',
                 'kotelezoen-valaszthato'=> ["francia", "német", "olasz", "orosz", "spanyol", "történelem"],
-            ],
+            ]
     ];
 
     private function aTargy20alatt() {
@@ -34,7 +34,7 @@ class Felvetelizo {
         }
     }
 
-    private function hianyzikKotelezoTargy() {
+    private function hianyzikErettsegiKotelezoTargy() {
         $tmp = [];
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
             array_push($tmp, $value['nev']);     
@@ -42,23 +42,57 @@ class Felvetelizo {
         return array_diff(self::$kotelezoTargyak, $tmp);
     }
 
-    private function kotelezoenValaszthatoTargyak() {
-        $tmp = [];
-        foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
-            array_push($tmp, $value['nev']);     
-        }
-        return array_diff($tmp, self::$kotelezoTargyak);
+    // //megcsinalni szakonkent
+    // private function kotelezoenValaszthatoTargyak() {
+    //     $tmp = [];
+    //     foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
+    //         array_push($tmp, $value['nev']);     
+    //     }
+    //     return array_diff($tmp, self::$kotelezoTargyak);
+    // }
+
+    // //+szak
+    // private function legnagyobbKotelezoenValaszthato(){
+    //     $max = 0;
+    //     foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
+    //         if(!in_array($value['nev'],self::$kotelezoTargyak) && rtrim($value['eredmeny'], "%") > $max){
+    //             $max = rtrim($value['eredmeny'], "%");
+    //         }    
+    //     }
+    //     return $max;
+    // }
+
+    private function szakKotelezoTargyPontok(){
+            foreach(self::$szakok as $szak){ 
+                 $a = array_diff_assoc($this->adatok['valasztott-szak'], $szak);
+                 if(!$a){
+                     foreach($this->adatok['erettsegi-eredmenyek'] as $eredmeny){
+                         if($eredmeny['nev'] == $szak['kotelezo']){
+                             return rtrim($eredmeny['eredmeny'], '%');
+                         }
+                     }
+                 }
+            }
+        
     }
 
-    private function legnagyobbKotelezoenValaszthato(){
-        $max = 0;
-        foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
-            if(!in_array($value['nev'],self::$kotelezoTargyak) && rtrim($value['eredmeny'], "%") > $max){
-                $max = rtrim($value['eredmeny'], "%");
-            }    
+    private function szakLegnagyobbKotelezoenValaszthatoTargyPontok(){
+        foreach(self::$szakok as $szak){ 
+             $a = array_diff_assoc($this->adatok['valasztott-szak'], $szak);
+             if(!$a){
+                $max = 0;
+                 foreach($this->adatok['erettsegi-eredmenyek'] as $eredmeny){
+                     foreach($szak['kotelezoen-valaszthato'] as $targy){
+                        if($eredmeny['nev'] == $targy){
+                            $max= rtrim($eredmeny['eredmeny'], '%');
+                        }
+                    }
+                 }
+                 return $max;
+             }
         }
-        return $max;
-    }
+    
+}
 
 
     public function pontszamitas(){
@@ -67,23 +101,31 @@ class Felvetelizo {
             return;
         }
 
-        if($this -> hianyzikKotelezoTargy()){
+        if($this -> hianyzikErettsegiKotelezoTargy()){
             echo "hiba, nem lehetséges a pontszámítás a kötelező érettségi tárgyak hiánya miatt";
             return;
         }
 
-        if(!$this->kotelezoenValaszthatoTargyak()){
-            echo "hiba,  egy kötelezően választható tárgyat mindenképpen választani kell";
+        if(!$this->szakKotelezoTargyPontok()){
+            echo "hiba, szakhoz kapcsolódó kötelező tárgyat mindenképpen választani kell";
             return;
         }
 
-        echo $this->legnagyobbKotelezoenValaszthato();
+        if(!$this->szakLegnagyobbKotelezoenValaszthatoTargyPontok()){
+            echo "hiba, 1 kötelezően választható tárgyat mindenképpen választani kell";
+            return;
+        }
+        
+        echo "alappontok: " . ($this->szakKotelezoTargyPontok() + $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok())*2;
 
+        //echo $this->legnagyobbKotelezoenValaszthato();
+        //echo $this->szakKotelezoTargyPontok();
+        //echo $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok();
 
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData0);
+$felvetelizo = new Felvetelizo($exampleData1);
 
 $felvetelizo->pontszamitas();
 
