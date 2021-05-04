@@ -139,7 +139,7 @@ $exampleData2 = [
     ],
 ];
 
-// output: hiba, nem lehetséges a pontszámítás a magyar nyelv és irodalom tárgyból elért 20% alatti eredmény miatt
+// output: hiba, nem lehetséges a pontszámítás  20% alatti eredmények miatt
 $exampleData3 = [
     'valasztott-szak' => [
         'egyetem' => 'ELTE',
@@ -155,12 +155,12 @@ $exampleData3 = [
         [
             'nev' => 'történelem',
             'tipus' => 'közép',
-            'eredmeny' => '80%',
+            'eredmeny' => '10%',
         ],
         [
             'nev' => 'matematika',
             'tipus' => 'emelt',
-            'eredmeny' => '90%',
+            'eredmeny' => '10%',
         ],
         [
             'nev' => 'angol nyelv',
@@ -187,18 +187,18 @@ $exampleData3 = [
     ],
 ];
 
-//hiba nincs kotelezoen valszthato targy
+//angol nem emelt szintu
 $exampleData4 = [
     'valasztott-szak' => [
-        'egyetem' => 'ELTE',
-        'kar' => 'IK',
-        'szak' => 'Programtervező informatikus',
+        'egyetem' => 'PPKE',
+        'kar' => 'BTK',
+        'szak' => 'Anglisztika',
     ],
     'erettsegi-eredmenyek' => [
         [
             'nev' => 'magyar nyelv és irodalom',
             'tipus' => 'közép',
-            'eredmeny' => '45%',
+            'eredmeny' => '70%',
         ],
         [
             'nev' => 'történelem',
@@ -209,6 +209,16 @@ $exampleData4 = [
             'nev' => 'matematika',
             'tipus' => 'emelt',
             'eredmeny' => '90%',
+        ],
+        [
+            'nev' => 'informatika',
+            'tipus' => 'közép',
+            'eredmeny' => '95%',
+        ],
+        [
+            'nev' => 'angol',
+            'tipus' => 'közép',
+            'eredmeny' => '95%',
         ],
     ],
     'tobbletpontok' => [
@@ -225,7 +235,7 @@ $exampleData4 = [
     ],
 ];
 
-//hiba, nincs kotelezo targy
+//450 (350 alappont + 100 többletpont)
 $exampleData5 = [
     'valasztott-szak' => [
         'egyetem' => 'PPKE',
@@ -273,6 +283,7 @@ $exampleData5 = [
     ],
 ];
 
+//Hiba, nem lehetséges a pontszámítás a kötelező érettségi "matematika" hiánya miatt.
 $exampleData6 = [
     'valasztott-szak' => [
         'egyetem' => 'ELTE',
@@ -290,11 +301,11 @@ $exampleData6 = [
             'tipus' => 'közép',
             'eredmeny' => '80%',
         ],
-        [
-            'nev' => 'matematika',
-            'tipus' => 'emelt',
-            'eredmeny' => '90%',
-        ],
+        // [
+        //     'nev' => 'matematika',
+        //     'tipus' => 'emelt',
+        //     'eredmeny' => '90%',
+        // ],
         [
             'nev' => 'angol nyelv',
             'tipus' => 'közép',
@@ -327,5 +338,43 @@ $exampleData6 = [
         //     'tipus' => 'B2',
         //     'nyelv' => 'német',
         // ],
+    ],
+];
+
+//nincs kotelezoen valaszthato targy
+$exampleData7 = [
+    'valasztott-szak' => [
+        'egyetem' => 'ELTE',
+        'kar' => 'IK',
+        'szak' => 'Programtervező informatikus',
+    ],
+    'erettsegi-eredmenyek' => [
+        [
+            'nev' => 'magyar nyelv és irodalom',
+            'tipus' => 'közép',
+            'eredmeny' => '45%',
+        ],
+        [
+            'nev' => 'történelem',
+            'tipus' => 'közép',
+            'eredmeny' => '80%',
+        ],
+        [
+            'nev' => 'matematika',
+            'tipus' => 'emelt',
+            'eredmeny' => '90%',
+        ],
+    ],
+    'tobbletpontok' => [
+        [
+            'kategoria' => 'Nyelvvizsga',
+            'tipus' => 'B2',
+            'nyelv' => 'angol',
+        ],
+        [
+            'kategoria' => 'Nyelvvizsga',
+            'tipus' => 'C1',
+            'nyelv' => 'német',
+        ],
     ],
 ];

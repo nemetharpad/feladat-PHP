@@ -1,7 +1,5 @@
 <?php
 
-require_once('homework_input.php');
-
 class Felvetelizo {
 
     public function __construct($adatok){
@@ -28,12 +26,14 @@ class Felvetelizo {
             ]
     ];
 
-    private function aTargy20alatt() {
+    private function aTargyak20alatt() {
+        $tmp = [];
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
             if(rtrim($value['eredmeny'], "%") < 20){
-                return $value['nev'];
+                array_push($tmp, $value['nev']);
             }          
         }
+        return $tmp;
     }
 
     private function hianyzikErettsegiKotelezoTargy() {
@@ -45,20 +45,19 @@ class Felvetelizo {
     }
 
     private function szakKotelezoTargyPontok(){
-            foreach(self::$szakok as $szak){ 
-                 $a = array_diff_assoc($this->adatok['valasztott-szak'], $szak);
-                 if(!$a){
-                     foreach($this->adatok['erettsegi-eredmenyek'] as $eredmeny){
-                         if($eredmeny['nev'] == $szak['kotelezo']){
-                             if($szak['kotelezo_minSzint'] == $eredmeny['tipus'] || $szak['kotelezo_minSzint'] == 'közép'){
-                                return rtrim($eredmeny['eredmeny'], '%');
-                             }
-                             
-                         }
-                     }
-                 }
+        foreach(self::$szakok as $szak){ 
+            $a = array_diff_assoc($this->adatok['valasztott-szak'], $szak);
+            if(!$a){
+                foreach($this->adatok['erettsegi-eredmenyek'] as $eredmeny){
+                    if($eredmeny['nev'] == $szak['kotelezo']){
+                        if($szak['kotelezo_minSzint'] == $eredmeny['tipus'] || $szak['kotelezo_minSzint'] == 'közép'){
+                        return rtrim($eredmeny['eredmeny'], '%');
+                        }
+                        
+                    }
+                }
             }
-        
+        }    
     }
 
     private function szakLegnagyobbKotelezoenValaszthatoTargyPontok(){
@@ -122,37 +121,68 @@ class Felvetelizo {
         return min($this -> nyelvVizsgaTobbletPontok() + $this->emeltSzintuVizsgaPontok(), 100);
     }
 
+    private static function arrayJoin(array $list, $conjunction = 'és') {
+        $last = array_pop($list);
+        if ($list) {
+          return '"' . implode('", "', $list) . '"' . ' ' . $conjunction . ' ' . '"'. $last .'"';
+        }
+        return '"'. $last .'"';
+    }
 
     public function pontszamitas(){
-        if($this -> aTargy20alatt()){
-            echo "hiba, nem lehetséges a pontszámítás a ". $this -> aTargy20alatt() ." tárgyból elért 20% alatti eredmény miatt";
+        if($this -> aTargyak20alatt()){
+            $a = $this -> aTargyak20alatt();
+            $c = count($a)>1 ? " tárgyakból ":" tárgyból ";
+            echo "Hiba, nem lehetséges a pontszámítás a ". self::arrayJoin($a) . $c . "elért 20% alatti eredmény miatt.";
+            echo "<br>";
             return;
         }
 
         if($this -> hianyzikErettsegiKotelezoTargy()){
-            echo "hiba, nem lehetséges a pontszámítás a kötelező érettségi tárgyak hiánya miatt";
+            echo "Hiba, nem lehetséges a pontszámítás a kötelező érettségi ". self::arrayJoin($this -> hianyzikErettsegiKotelezoTargy()) ." hiánya miatt.";
+            echo "<br>";
             return;
         }
 
         if(!$this->szakKotelezoTargyPontok()){
-            echo "hiba, a szakhoz kapcsolódó kötelező tárgyat mindenképpen választani kell";
+            echo "Hiba, a szakhoz kapcsolódó kötelező tárgyat mindenképpen választani kell.";
+            echo "<br>";
             return;
         }
 
         if(!$this->szakLegnagyobbKotelezoenValaszthatoTargyPontok()){
-            echo "hiba, 1 kötelezően választható tárgyat mindenképpen választani kell";
+            echo "Hiba, legalább egy kötelezően választható tárgyat mindenképpen választani kell.";
+            echo "<br>";
             return;
         }
         
-        //print_r($this-> hianyzikErettsegiKotelezoTargy());
-
-        echo $this->alapPontok() + $this->tobbletPontok() . " (" . $this->alapPontok() . " alappont + " . $this->tobbletPontok() . " tobbletpont)";
+        echo $this->alapPontok() + $this->tobbletPontok() . " (" . $this->alapPontok() . " alappont + " . $this->tobbletPontok() . " többletpont)";
+        echo "<br>";
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData5);
 
-$felvetelizo->pontszamitas();
+require_once('homework_input.php');
+
+$felvetelizo0 = new Felvetelizo($exampleData0);
+$felvetelizo0->pontszamitas();
+
+
+// $felvetelizo1 = new Felvetelizo($exampleData1);
+// $felvetelizo2 = new Felvetelizo($exampleData2);
+// $felvetelizo3 = new Felvetelizo($exampleData3);
+// $felvetelizo4 = new Felvetelizo($exampleData4);
+// $felvetelizo5 = new Felvetelizo($exampleData5);
+// $felvetelizo6 = new Felvetelizo($exampleData6);
+// $felvetelizo7 = new Felvetelizo($exampleData7);
+
+// $felvetelizo1->pontszamitas();
+// $felvetelizo2->pontszamitas();
+// $felvetelizo3->pontszamitas();
+// $felvetelizo4->pontszamitas();
+// $felvetelizo5->pontszamitas();
+// $felvetelizo6->pontszamitas();
+// $felvetelizo7->pontszamitas();
 
 
 
