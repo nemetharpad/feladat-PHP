@@ -25,6 +25,7 @@ class Felvetelizo {
                 'kotelezoen-valaszthato'=> ["francia", "német", "olasz", "orosz", "spanyol", "történelem"],
             ]
     ];
+   // private static $nyelvVizsgak = ['angol', 'német'];
 
     private function aTargy20alatt() {
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
@@ -91,9 +92,32 @@ class Felvetelizo {
                  return $max;
              }
         }
-    
-}
+    }
 
+    private function nyelvVizsgaTobbletPontok(){
+        $nyelvVizsgak = ['angol', 'német'];
+        $arr = ['angol'=>"", 'német'=>""];
+
+        foreach($this->adatok['tobbletpontok'] as $x){
+            foreach($nyelvVizsgak as $nyelv){
+                if($x['nyelv'] == $nyelv){
+                    if($arr[$nyelv] != "C1"){
+                        $arr[$nyelv] = $x['tipus'];
+                    }
+                }
+            }
+        }
+
+        foreach($arr as $x){
+            if($x == "C1"){
+                $osszPontok = $osszPontok + 40;
+            }elseif($x == "B2"){
+                $osszPontok = $osszPontok + 28;
+            }
+        }
+
+        return $osszPontok;
+    }
 
     public function pontszamitas(){
         if($this -> aTargy20alatt()){
@@ -116,16 +140,14 @@ class Felvetelizo {
             return;
         }
         
-        echo "alappontok: " . ($this->szakKotelezoTargyPontok() + $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok())*2;
+        //echo "alappontok: " . ($this->szakKotelezoTargyPontok() + $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok())*2;
 
-        //echo $this->legnagyobbKotelezoenValaszthato();
-        //echo $this->szakKotelezoTargyPontok();
-        //echo $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok();
+        echo $this->nyelvVizsgaTobbletPontok();
 
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData1);
+$felvetelizo = new Felvetelizo($exampleData6);
 
 $felvetelizo->pontszamitas();
 
