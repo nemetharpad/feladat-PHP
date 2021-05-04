@@ -15,17 +15,18 @@ class Felvetelizo {
             'kar' => 'IK',
             'szak' => 'Programtervező informatikus',
             'kotelezo' => 'matematika',
+            'kotelezo_minSzint' => 'közép',
             'kotelezoen-valaszthato'=> ["biológia", "fizika", "informatika", "kémia"],
             ],
             [
                 'egyetem' => 'PPKE',
                 'kar' => 'BTK',
                 'szak' => 'Anglisztika',
-                'kotelezo' => 'angol (emelt szinten)',
+                'kotelezo' => 'angol',
+                'kotelezo_minSzint' => 'emelt',
                 'kotelezoen-valaszthato'=> ["francia", "német", "olasz", "orosz", "spanyol", "történelem"],
             ]
     ];
-   // private static $nyelvVizsgak = ['angol', 'német'];
 
     private function aTargy20alatt() {
         foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
@@ -43,33 +44,16 @@ class Felvetelizo {
         return array_diff(self::$kotelezoTargyak, $tmp);
     }
 
-    // //megcsinalni szakonkent
-    // private function kotelezoenValaszthatoTargyak() {
-    //     $tmp = [];
-    //     foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
-    //         array_push($tmp, $value['nev']);     
-    //     }
-    //     return array_diff($tmp, self::$kotelezoTargyak);
-    // }
-
-    // //+szak
-    // private function legnagyobbKotelezoenValaszthato(){
-    //     $max = 0;
-    //     foreach ($this->adatok['erettsegi-eredmenyek'] as $value) {
-    //         if(!in_array($value['nev'],self::$kotelezoTargyak) && rtrim($value['eredmeny'], "%") > $max){
-    //             $max = rtrim($value['eredmeny'], "%");
-    //         }    
-    //     }
-    //     return $max;
-    // }
-
     private function szakKotelezoTargyPontok(){
             foreach(self::$szakok as $szak){ 
                  $a = array_diff_assoc($this->adatok['valasztott-szak'], $szak);
                  if(!$a){
                      foreach($this->adatok['erettsegi-eredmenyek'] as $eredmeny){
                          if($eredmeny['nev'] == $szak['kotelezo']){
-                             return rtrim($eredmeny['eredmeny'], '%');
+                             if($szak['kotelezo_minSzint'] == $eredmeny['tipus'] || $szak['kotelezo_minSzint'] == 'közép'){
+                                return rtrim($eredmeny['eredmeny'], '%');
+                             }
+                             
                          }
                      }
                  }
@@ -138,6 +122,7 @@ class Felvetelizo {
         return min($this -> nyelvVizsgaTobbletPontok() + $this->emeltSzintuVizsgaPontok(), 100);
     }
 
+
     public function pontszamitas(){
         if($this -> aTargy20alatt()){
             echo "hiba, nem lehetséges a pontszámítás a ". $this -> aTargy20alatt() ." tárgyból elért 20% alatti eredmény miatt";
@@ -150,7 +135,7 @@ class Felvetelizo {
         }
 
         if(!$this->szakKotelezoTargyPontok()){
-            echo "hiba, szakhoz kapcsolódó kötelező tárgyat mindenképpen választani kell";
+            echo "hiba, a szakhoz kapcsolódó kötelező tárgyat mindenképpen választani kell";
             return;
         }
 
@@ -159,17 +144,13 @@ class Felvetelizo {
             return;
         }
         
-        //echo "alappontok: " . ($this->szakKotelezoTargyPontok() + $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok())*2;
-
-        //echo $this->nyelvVizsgaTobbletPontok();
-        //echo $this->emeltSzintuVizsgaPontok();
-        //echo $this -> nyelvVizsgaTobbletPontok();
+        //print_r($this-> hianyzikErettsegiKotelezoTargy());
 
         echo $this->alapPontok() + $this->tobbletPontok() . " (" . $this->alapPontok() . " alappont + " . $this->tobbletPontok() . " tobbletpont)";
     }
 }
 
-$felvetelizo = new Felvetelizo($exampleData6);
+$felvetelizo = new Felvetelizo($exampleData5);
 
 $felvetelizo->pontszamitas();
 

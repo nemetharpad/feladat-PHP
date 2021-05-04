@@ -231,7 +231,6 @@ $exampleData5 = [
         'egyetem' => 'PPKE',
         'kar' => 'BTK',
         'szak' => 'Anglisztika',
-        'kotelezo' => 'angol'
     ],
     'erettsegi-eredmenyek' => [
         [
@@ -252,6 +251,11 @@ $exampleData5 = [
         [
             'nev' => 'informatika',
             'tipus' => 'közép',
+            'eredmeny' => '95%',
+        ],
+        [
+            'nev' => 'angol',
+            'tipus' => 'emelt',
             'eredmeny' => '95%',
         ],
     ],
