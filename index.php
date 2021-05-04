@@ -97,6 +97,7 @@ class Felvetelizo {
     private function nyelvVizsgaTobbletPontok(){
         $nyelvVizsgak = ['angol', 'német'];
         $arr = ['angol'=>"", 'német'=>""];
+        $osszPontok=0;
 
         foreach($this->adatok['tobbletpontok'] as $x){
             foreach($nyelvVizsgak as $nyelv){
@@ -117,6 +118,24 @@ class Felvetelizo {
         }
 
         return $osszPontok;
+    }
+
+    private function emeltSzintuVizsgaPontok(){
+        $pontok=0;
+        foreach($this->adatok['erettsegi-eredmenyek'] as $x){
+            if($x['tipus']=='emelt'){
+                $pontok = $pontok + 50;
+            }
+        }
+        return $pontok;
+    }
+
+    private function alapPontok(){
+        return ($this->szakKotelezoTargyPontok() + $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok())*2;
+    }
+
+    private function tobbletPontok(){
+        return min($this -> nyelvVizsgaTobbletPontok() + $this->emeltSzintuVizsgaPontok(), 100);
     }
 
     public function pontszamitas(){
@@ -142,8 +161,11 @@ class Felvetelizo {
         
         //echo "alappontok: " . ($this->szakKotelezoTargyPontok() + $this->szakLegnagyobbKotelezoenValaszthatoTargyPontok())*2;
 
-        echo $this->nyelvVizsgaTobbletPontok();
+        //echo $this->nyelvVizsgaTobbletPontok();
+        //echo $this->emeltSzintuVizsgaPontok();
+        //echo $this -> nyelvVizsgaTobbletPontok();
 
+        echo $this->alapPontok() + $this->tobbletPontok() . " (" . $this->alapPontok() . " alappont + " . $this->tobbletPontok() . " tobbletpont)";
     }
 }
 

@@ -313,15 +313,15 @@ $exampleData6 = [
             'tipus' => 'B2',
             'nyelv' => 'angol',
         ],
-        [
-            'kategoria' => 'Nyelvvizsga',
-            'tipus' => 'C1',
-            'nyelv' => 'német',
-        ],
-        [
-            'kategoria' => 'Nyelvvizsga',
-            'tipus' => 'B2',
-            'nyelv' => 'német',
-        ],
+        // [
+        //     'kategoria' => 'Nyelvvizsga',
+        //     'tipus' => 'C1',
+        //     'nyelv' => 'német',
+        // ],
+        // [
+        //     'kategoria' => 'Nyelvvizsga',
+        //     'tipus' => 'B2',
+        //     'nyelv' => 'német',
+        // ],
     ],
 ];
